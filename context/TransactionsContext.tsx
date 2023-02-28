@@ -2,7 +2,7 @@ import TransactionsContract from '@/contracts/TransactionsContract';
 import TokenContract from '@/contracts/TokenContract';
 import { Contract, ethers } from 'ethers'
 import React, { ReactNode } from 'react'
-import { IInput } from '@/_types_';
+import { IInput, ITransaction } from '@/_types_';
 import { tokenABI, tokenAddress, transABI, transAddress } from '@/contracts/utils';
 
 type Props = {
@@ -18,6 +18,7 @@ export const TransactionsProvider = ({ children }: Props) => {
     const [formData, setFormData] = React.useState<IInput>({ addressTo: '', amount: 0, message: '', keyword: '' });
     const [isLoading, setIsLoading] = React.useState(false);
     const [count, setCount] = React.useState<number>(0);
+    const [transactions, setTransactions] = React.useState<ITransaction[]>([]);
 
     const handleChange = (e: any, name: string) => {
         setFormData((prevState) => ({ ...prevState, [name]: e.target.value }))
@@ -25,19 +26,20 @@ export const TransactionsProvider = ({ children }: Props) => {
 
     const checkIfWalletConnected = async () => {
         try {
-            if (!window.ethereum) alert("Please install metamask!")
+            // if (!window.ethereum) alert("Please install metamask!")
 
-            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+            // const accounts = await window.ethereum.request({ method: "eth_accounts" });
 
-            if (accounts.length) {
-                setConnectedAccount(accounts[0])
+            // if (accounts.length) {
+            //     setConnectedAccount(accounts[0])
 
-                // getAllTransactions()
-            } else {
-                console.log("No accounts found");
-            }
+            //     // getAllTransactions()
+            // } else {
+            //     console.log("No accounts found");
+            // }
+            console.log('check wallet connected: ', connectedAccount);
 
-            console.log('check wallet connected: ', accounts);
+            if (connectedAccount !== '') getAllTransactions();
         } catch (error) {
             console.log(error);
             throw new Error("No ethereum Object");
@@ -49,11 +51,14 @@ export const TransactionsProvider = ({ children }: Props) => {
             if (!window.ethereum) alert("Please install metamask!")
 
             console.log('...connecting wallet');
-            const accounts = window.ethereum.request({ method: "eth_requestAccounts" });
-            // const provider = new ethers.providers.Web3Provider(window.ethereum);
-            // const signer = provider.getSigner();
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            // const accounts = window.ethereum.request({ method: "eth_requestAccounts" });
 
-            setConnectedAccount(accounts[0]);
+            const address = await signer.getAddress();
+            // const balance = (await signer.getBalance()).toNumber;
+
+            setConnectedAccount(address);
         } catch (error) {
             console.log(error);
             throw new Error("No ethereum Object");
@@ -87,6 +92,24 @@ export const TransactionsProvider = ({ children }: Props) => {
             const transactionCount = await transactionContract.getTransactionCount();
             setCount(transactionCount);
 
+            getAllTransactions();
+        } catch (error) {
+            console.log(error);
+            throw new Error("No ethereum Object");
+        }
+    }
+
+    const getAllTransactions = async () => {
+        try {
+            if (!window.ethereum) alert("Please install metamask!")
+
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+            const transactionContract = new TransactionsContract(provider);
+
+            const availableTransactions = await transactionContract.getAllTransactions();
+
+            setTransactions(availableTransactions);
         } catch (error) {
             console.log(error);
             throw new Error("No ethereum Object");
@@ -95,10 +118,10 @@ export const TransactionsProvider = ({ children }: Props) => {
 
     React.useEffect(() => {
         checkIfWalletConnected();
-    }, [])
+    }, [connectedAccount])
 
     return (
-        <TransactionsContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction, isLoading }}>
+        <TransactionsContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction, isLoading, transactions }}>
             {children}
         </TransactionsContext.Provider>
     )

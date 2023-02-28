@@ -1,10 +1,12 @@
-export interface ITransfer {
-    sender: string,
-    receiver: string,
-    amount: number,
+export interface ITransaction {
+    id?: number,
+    addressTo: string,
+    addressFrom: string,
+    amount: string,
     message: string,
-    timestamp: number,
-    keyword: string
+    timestamp: string,
+    keyword?: string,
+    url?: string
 }
 
 export interface IInput {

@@ -5,6 +5,7 @@ import { BsInfoCircle } from "react-icons/bs";
 
 import Loader from "./Loader";
 import { TransactionsContext } from "@/context/TransactionsContext";
+import { shortenAddress } from "@/utils/shortenAddress";
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
@@ -75,7 +76,7 @@ const Welcome = () => {
             </button>)
           }
 
-          {connectedAccount &&
+          {/* {connectedAccount &&
             (<button
               type="button"
               className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
@@ -84,7 +85,7 @@ const Welcome = () => {
                 {connectedAccount}
               </p>
             </button>)
-          }
+          } */}
 
           {/* Bảng Grid */}
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
@@ -121,7 +122,7 @@ const Welcome = () => {
 
             <div>
               <p className="text-white font-light text-sm">
-                Address
+                {connectedAccount === '' ? "Address" : shortenAddress(connectedAccount)}
               </p>
               <p className="text-white font-semibold text-lg mt-1">
                 Ethereum

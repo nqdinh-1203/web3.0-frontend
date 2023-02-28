@@ -3,7 +3,7 @@ import { BigNumber, ethers } from "ethers";
 import { BaseInterface } from "./interfaces";
 import { getRPC } from "./utils";
 import { transABI, transAddress } from "./utils";
-import { ITransfer } from "@/_types_";
+import { ITransaction } from "@/_types_";
 
 export default class TransactionsContract extends BaseInterface {
     constructor(provider?: ethers.providers.Web3Provider) {
@@ -20,14 +20,14 @@ export default class TransactionsContract extends BaseInterface {
         return this._handleTransactionRespone(addTx);
     }
 
-    async getAllTransactions(): Promise<ITransfer[]> {
+    async getAllTransactions(): Promise<ITransaction[]> {
         const rawTrans: any[] = await this._contract.getAllTransactions();
-        const trans: ITransfer[] = rawTrans.map((item: any) => ({
-            sender: item.sender,
-            receiver: item.receiver,
-            amount: this._toNumber(item.amount),
+        const trans: ITransaction[] = rawTrans.map((item: any) => ({
+            addressFrom: item.sender,
+            addressTo: item.receiver,
+            amount: (this._toNumber(item.amount)).toString(),
             message: item.message,
-            timestamp: this._toNumber(item.timestamp),
+            timestamp: new Date(item.timestamp.toNumber() * 1000).toLocaleString(),
             keyword: item.keyword
         }))
 
