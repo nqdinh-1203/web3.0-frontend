@@ -4,6 +4,7 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 
 import Loader from "./Loader";
+import { TransactionsContext } from "@/context/TransactionsContext";
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
@@ -27,21 +28,26 @@ const Input = ({ placeholder, name, type, value, handleChange }: InputProp) => (
 );
 
 const Welcome = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const { connectWallet, connectedAccount, formData, sendTransaction, handleChange, isLoading } = useContext(TransactionsContext);
 
-  // hàm connect ví
-  const connectWallet = () => {
-    console.log("...Connecting");
-  }
+  // console.log(connectWallet);
 
-  // Hàm thay đổi giá trị các ô input
-  const handleChange = () => {
+  // hàm connect ví => connectWallet
 
-  }
+  // Hàm thay đổi giá trị các ô input => handleChange
 
   // Hàm xử lý submit
-  const handleSubmit = () => {
-    setIsLoading(true);
+  const handleSubmit = (e: any) => {
+    const { addressTo, amount, keyword, message } = formData;
+
+    e.preventDefault();
+
+    if (!addressTo || !amount || !keyword || !message) return;
+
+    sendTransaction();
+
+    // setIsLoading(true);
   }
 
   return (
@@ -57,15 +63,28 @@ const Welcome = () => {
           </p>
 
           {/* Nút connect ví */}
-          <button
-            type="button"
-            onClick={connectWallet}
-            className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-          >
-            <p className="text-white text-base font-semibold">
-              Connect Wallet
-            </p>
-          </button>
+          {!connectedAccount &&
+            (<button
+              type="button"
+              onClick={connectWallet}
+              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              <p className="text-white text-base font-semibold">
+                Connect Wallet
+              </p>
+            </button>)
+          }
+
+          {connectedAccount &&
+            (<button
+              type="button"
+              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              <p className="text-white text-base font-semibold">
+                {connectedAccount}
+              </p>
+            </button>)
+          }
 
           {/* Bảng Grid */}
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
