@@ -3,7 +3,7 @@ import { BigNumber, ethers } from "ethers";
 import { BaseInterface } from "./interfaces";
 import { getRPC } from "./utils";
 import { transABI, transAddress } from "./utils";
-import { ITransaction } from "@/_types_";
+import { ITransaction } from "@/src/_types_";
 
 export default class TransactionsContract extends BaseInterface {
     constructor(provider?: ethers.providers.Web3Provider) {

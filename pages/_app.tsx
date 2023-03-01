@@ -1,4 +1,4 @@
-import { TransactionsProvider } from '@/context/TransactionsContext'
+import { TransactionsProvider } from '@/src/context/TransactionsContext'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 

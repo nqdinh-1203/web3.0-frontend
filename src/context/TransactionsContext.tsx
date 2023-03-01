@@ -1,15 +1,25 @@
-import TransactionsContract from '@/contracts/TransactionsContract';
-import TokenContract from '@/contracts/TokenContract';
+import TransactionsContract from '@/src/contracts/TransactionsContract';
+import TokenContract from '@/src/contracts/TokenContract';
 import { Contract, ethers } from 'ethers'
 import React, { ReactNode } from 'react'
-import { IInput, ITransaction } from '@/_types_';
-import { tokenABI, tokenAddress, transABI, transAddress } from '@/contracts/utils';
+import { IInput, ITransaction } from '@/src/_types_';
+import { tokenABI, tokenAddress, transABI, transAddress } from '@/src/contracts/utils';
 
 type Props = {
     children: ReactNode
 }
 
-export const TransactionsContext = React.createContext({});
+type contextProps = {
+    connectWallet?: any,
+    connectedAccount?: any,
+    formData?: any,
+    handleChange?: any,
+    sendTransaction?: any,
+    isLoading?: any,
+    transactions?: any
+}
+
+export const TransactionsContext = React.createContext<contextProps>({});
 
 declare var window: any;
 
@@ -121,7 +131,7 @@ export const TransactionsProvider = ({ children }: Props) => {
     }, [connectedAccount])
 
     return (
-        <TransactionsContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction, isLoading, transactions }}>
+        <TransactionsContext.Provider value={{ connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading, transactions }}>
             {children}
         </TransactionsContext.Provider>
     )

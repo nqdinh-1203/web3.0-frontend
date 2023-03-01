@@ -1,12 +1,12 @@
-import { TransactionsContext } from '@/context/TransactionsContext';
-import useFetch from '@/hooks/useFetch';
-import dummyData from '@/utils/dummyData';
-import { shortenAddress } from '@/utils/shortenAddress';
-import { ITransaction } from '@/_types_';
+import { TransactionsContext } from '@/src/context/TransactionsContext';
+// import useFetch from '@/src/hooks/useFetch';
+import dummyData from '@/src/utils/dummyData';
+import { shortenAddress } from '@/src/utils/shortenAddress';
+import { ITransaction } from '@/src/_types_';
 import React from 'react';
 
 const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }: ITransaction) => {
-  const gifUrl = keyword ? useFetch({ keyword }) : url;
+  const gifUrl = keyword ? "https://metro.co.uk/wp-content/uploads/2015/05/pokemon_crying.gif?quality=90&strip=all&zoom=1&resize=500%2C284" : url;
 
   return (
     <div className="bg-[#181918] m-4 flex flex-1

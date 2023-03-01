@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import { Footer, Navbar, Services, Transactions, Welcome } from '@/components'
+import { Footer, Navbar, Services, Transactions, Welcome } from '@/src/components'
 
 const inter = Inter({ subsets: ['latin'] })
 
