@@ -61,8 +61,8 @@ export const TransactionsProvider = ({ children }: Props) => {
             if (!window.ethereum) alert("Please install metamask!")
 
             console.log('...connecting wallet');
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
+            const provider = await new ethers.providers.Web3Provider(window.ethereum);
+            const signer = await provider.getSigner();
             // const accounts = window.ethereum.request({ method: "eth_requestAccounts" });
 
             const address = await signer.getAddress();
